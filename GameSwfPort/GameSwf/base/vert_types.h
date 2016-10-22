@@ -76,7 +76,7 @@ inline sint64	determinant_sint16(const vec2<sint16>& a, const vec2<sint16>& b, c
 template<class coord_t>
 inline int	vertex_left_test(const vec2<coord_t>& a, const vec2<coord_t>& b, const vec2<coord_t>& c)
 {
-	compiler_assert(0);	// must specialize
+	//compiler_assert(0);	// must specialize
 	return -1;
 }
 
