@@ -158,7 +158,7 @@ inline bool	edges_intersect_sub(const array<poly_vert<coord_t> >& sorted_verts, 
 {
 	// Need to specialize this on coord_t, in order to get it
 	// correct and avoid overflow.
-	compiler_assert(0);
+	// compiler_assert(0);
 	return -1;
 }
 
@@ -291,6 +291,67 @@ inline bool	edges_intersect_sub(const array<poly_vert<sint32> >& sorted_verts, i
 	return true;
 }
 
+template<>
+inline bool	edges_intersect_sub(const array<poly_vert<sint16> >& sorted_verts, int e0v0i, int e0v1i, int e1v0i, int e1v1i)
+// Return true if edge (e0v0,e0v1) intersects (e1v0,e1v1).
+//
+// Specialized for sint16
+{
+	// If e1v0,e1v1 are on opposite sides of e0, and e0v0,e0v1 are
+	// on opposite sides of e1, then the segments cross.  These
+	// are all determinant checks.
+
+	// The main degenerate case we need to watch out for is if
+	// both segments are zero-length.
+	//
+	// If only one is degenerate, our tests are still OK.
+
+	const vec2<sint16>&	e0v0 = sorted_verts[e0v0i].m_v;
+	const vec2<sint16>&	e0v1 = sorted_verts[e0v1i].m_v;
+	const vec2<sint16>&	e1v0 = sorted_verts[e1v0i].m_v;
+	const vec2<sint16>&	e1v1 = sorted_verts[e1v1i].m_v;
+
+	if (e0v0.x == e0v1.x && e0v0.y == e0v1.y)
+	{
+		// e0 is zero length.
+		if (e1v0.x == e1v1.x && e1v0.y == e1v1.y)
+		{
+			// Both edges are zero length.  Treat them as
+			// non-coincident (even if they're all on the
+			// same point).
+			return false;
+		}
+	}
+
+	// See if e1 crosses line of e0.
+	double	det10 = determinant_sint16(e0v0, e0v1, e1v0);
+	double	det11 = determinant_sint16(e0v0, e0v1, e1v1);
+
+	// Note: we do > 0, which means a vertex on a line counts as
+	// intersecting.  In general, if one vert is on the other
+	// segment, we have to go searching along the path in either
+	// direction to see if it crosses or not, and it gets
+	// complicated.  Better to treat it as intersection.
+
+	if (det10 * det11 > 0)
+	{
+		// e1 doesn't cross the line of e0.
+		return false;
+	}
+
+	// See if e0 crosses line of e1.
+	double det00 = determinant_sint16(e1v0, e1v1, e0v0);
+	double det01 = determinant_sint16(e1v0, e1v1, e0v1);
+
+	if (det00 * det01 > 0)
+	{
+		// e0 doesn't cross the line of e1.
+		return false;
+	}
+
+	// They both cross each other; the segments intersect.
+	return true;
+}
 
 template<class coord_t>
 bool	edges_intersect(const array<poly_vert<coord_t> >& sorted_verts, int e0v0, int e0v1, int e1v0, int e1v1)
