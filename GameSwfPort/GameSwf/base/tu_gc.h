@@ -142,7 +142,7 @@ namespace tu_gc {
 
 	private:
 		// TODO: are arrays worth implementing?
-		static void* operator new[](size_t sz) {
+		static void* operator new[](size_t sz) throw() {
 			assert(0);
 			return 0;
 		}
