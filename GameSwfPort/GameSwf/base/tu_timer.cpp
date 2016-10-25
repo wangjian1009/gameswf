@@ -4,38 +4,43 @@
 // whatever you want with it.
 
 // Utility/profiling timer.
+#include <sys/types.h>
 
-//Pete H - no sys/timeb in marmalade
-//#include <sys/timeb.h>	// for ftime()
-#ifndef	_TIME_T
-#define	_TIME_T
-typedef	long	time_t;
+#if defined FLEX
+#include <sys/time.h>
+#else
+#include <sys/timeb.h>
 #endif
 
-struct timeb {
-	time_t		time;		/* [XSI] Seconds since the Epoch */
-	unsigned short	millitm;	/* [XSI] Milliseconds since the Epoch */
-	short		timezone;	/* [XSI] Minutes west of CUT */
-	short		dstflag;	/* [XSI] non-zero if DST in effect */
-};
-
-void ftime (timeb* b) {}
-
-
 #include <assert.h>
-#include "base/tu_timer.h"
+#include "tu_timer.h"
 
+#if defined FLEX
+static timeval s_start_time;
+#else
 static timeb s_start_time;
+#endif
+
 void tu_timer::init_timer()
 {
-	ftime(&s_start_time);
+#if defined FLEX
+	gettimeofday(&s_start_time, NULL);
+#else
+    ftime(&s_start_time);
+#endif
 }
 
 Uint32 tu_timer::get_ticks()
 {
-	struct timeb tv;
-	ftime(&tv);
-	return  (tv.time - s_start_time.time) * 1000 + (tv.millitm - s_start_time.millitm);
+#if defined FLEX
+    struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return  (tv.tv_sec - s_start_time.tv_sec) * 1000 + (tv.tv_usec - s_start_time.tv_usec) / 1000;
+#else
+    struct timeb tv;
+    ftime(&tv);
+    return  (tv.time - s_start_time.time) * 1000 + (tv.millitm - s_start_time.millitm);
+#endif
 }
 
 tu_datetime::tu_datetime()
@@ -68,6 +73,7 @@ int tu_datetime::get(part part)
 
 		case YEAR:
 			return gmt->tm_year;
+			
 			break;
 
 		case MON:
