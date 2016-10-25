@@ -25,7 +25,6 @@
 #include "base/weak_ptr.h"
 
 class tu_file;
-class render_handler;
 
 // @@ forward decl to avoid including base/image.h; TODO change the
 // render_handler interface to not depend on these structs at all.
