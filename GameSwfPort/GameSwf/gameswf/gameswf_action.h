@@ -8,7 +8,7 @@
 
 #ifndef GAMESWF_ACTION_H
 #define GAMESWF_ACTION_H
-
+#include <stdarg.h>
 #include "gameswf/gameswf_value.h"
 #include "gameswf/gameswf_environment.h"
 #include "gameswf/gameswf_object.h"
