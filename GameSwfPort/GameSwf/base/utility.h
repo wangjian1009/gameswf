@@ -119,7 +119,7 @@ inline float flerp(float a, float b, float f) { return (b - a) * f + a; }
 const float LN_2 = 0.693147180559945f;
 
 //TODO - pete - this log2 causses errors on arm - for now im wrapping it an a conditional
-#ifdef I3D_ARCH_X86 
+#if defined I3D_ARCH_X86 || defined _MSC_VER
  inline float	log2(float f) { return logf(f) / LN_2; }
 #endif
 inline int	fchop( float f ) { return (int) f; }	// replace w/ inline asm if desired
