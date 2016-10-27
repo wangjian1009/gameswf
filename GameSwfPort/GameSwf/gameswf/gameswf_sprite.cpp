@@ -171,7 +171,7 @@ namespace gameswf
 	// none.  Coords are in parent's frame.
 	{
 		if (get_visible() == false) {
-			return NULL;
+			return false;
 		}
 
 		matrix	m = get_matrix();

@@ -802,7 +802,7 @@ namespace gameswf
 		format_text();
 	}
 
-	root* edit_text_character::get_root()
+	root* edit_text_character::get_root() const
 	{
 		return get_parent()->get_root(); 
 	} 
@@ -1025,7 +1025,7 @@ namespace gameswf
 	{ 
 		if (get_visible() == false) 
 		{ 
-			return NULL; 
+			return false; 
 		} 
 
 		const matrix&  m = get_matrix();

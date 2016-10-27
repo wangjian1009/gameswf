@@ -226,7 +226,7 @@ namespace gameswf
 
 		const char *type_of() { return "edittext";}
 
-		root* get_root();
+		root* get_root() const;
 		void show_cursor();
 		void display();
 		virtual bool on_event(const event_id& id);
