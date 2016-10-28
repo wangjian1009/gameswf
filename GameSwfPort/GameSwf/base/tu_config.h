@@ -87,7 +87,7 @@
 #endif
 
 #ifndef TU_USES_FLOAT_AS_COORDINATE_COMPONENT
-#define TU_USES_FLOAT_AS_COORDINATE_COMPONENT 0
+#define TU_USES_FLOAT_AS_COORDINATE_COMPONENT 1
 #endif
 
 // define TU_CONFIG_LINK_STATIC to 1 to link gameswf statically 
