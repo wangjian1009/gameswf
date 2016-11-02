@@ -35,7 +35,11 @@ extern "C" {
 #ifdef __MACH__
 #include <memory.h>
 #else
+#ifdef FLEX
+#include <stdlib.h>	/* tulrich */
+#else
 #include <malloc.h>	/* tulrich */
+#endif
 #endif
 
 #ifdef USE_DL_MALLOC
